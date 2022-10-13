@@ -1,6 +1,7 @@
 <template>
 	<view id="mineSweeper" class="mineSweeper-custom">
 		<view class="custom-wrapper__upload">
+			<view class="btn btn-upload">更换地雷图标</view>
 			<!-- <van-uploader class="custom-wrapper__upload-list" :before-read="beforeRead"
 				:after-read="(file)=> afterRead(file,'boom')" @oversize="onOversize">
 				<van-button icon="plus" type="default">更换地雷图标</van-button>
@@ -155,61 +156,6 @@
 				return yNum * xNum - boomNum
 			},
 		},
-		watch: {
-			// 监听翻开的格子数，判断游戏是否结束
-			showCount() {
-				const {
-					gameInfo: {
-						time,
-						alias,
-						record
-					},
-					over,
-					showCount,
-					saveNum,
-					scoreLevel
-				} = this;
-				if (over) return; // 处理最后一个点击到炸弹的异常情况
-				if (showCount === saveNum) {
-					// 停止计时
-					clearInterval(this.timer)
-
-					// 击败玩家百分比
-					let percent = '1';
-
-					for (const key in scoreLevel[alias]) {
-						console.log(key)
-
-						if (parseFloat(time) < key) {
-							percent = scoreLevel[alias][key]
-							console.log(key, '是这里', percent)
-							break
-						}
-					}
-
-					// 判断是否为最高纪录
-					if (!record || parseFloat(time) < parseFloat(record)) {
-						localStorage.setItem(`${alias}_record`, time)
-						this.gameInfo.record = time;
-					}
-
-					// 弹出对话框
-					vant.Dialog({
-						message: `恭喜用时${time}秒挑战成功！\n击败了${percent}%的玩家！\n您的最高纪录：${this.gameInfo.record}秒`,
-						confirmButtonColor: '#409eff',
-						confirmButtonText: '重新开始',
-						showCancelButton: true,
-						cancelButtonText: '返回主页'
-					}).then(() => {
-						// 重新开始
-						this.restart();
-					}).catch(() => {
-						// 返回主页
-						this.setLevelPage();
-					});
-				}
-			}
-		},
 		created() {
 			// 判断本地缓存中是否已上传自定义图标
 			['boom', 'flag'].forEach((item) => {
@@ -219,6 +165,15 @@
 			})
 		},
 		methods: {
+			choseImg() {
+				uni.chooseImage({
+					count: 1, //默认9
+					sizeType: ['compressed'], //可以指定是原图还是压缩图，默认二者都有
+					success: function(res) {
+						console.log(JSON.stringify(res.tempFilePaths));
+					}
+				});
+			},
 			// 重新开始确认
 			handleRestart(isRestart = true) {
 				// 停止计时
@@ -513,6 +468,12 @@
 
 <style lang="scss" scoped>
 	@import url("@/static/index.scss");
+
+	.btn-upload {
+		color: #323233;
+		background-color: #fff;
+		border: 1px solid #ebedf0;
+	}
 
 	// 自定义遮罩层
 	.custom {

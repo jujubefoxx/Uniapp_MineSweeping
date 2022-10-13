@@ -6,7 +6,7 @@
 				"navigationBarTitleText": "主页"
 			}
 		}, {
-			"path": "pages/custom /index",
+			"path": "pages/custom/index",
 			"style": {
 				"navigationBarTitleText": "定制内容"
 			}
