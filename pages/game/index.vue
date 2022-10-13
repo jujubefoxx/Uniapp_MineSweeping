@@ -1,7 +1,7 @@
 <template>
-	<view id="mineSweeper" class="mineSweeper">
+	<view id="mineSweeper" class="mineSweeper-game">
 		<view class="top">
-			<view v-if="hasChoseLevel" class="top-info">
+			<view class="top-info">
 				<view class="top-info__list">
 					<view>难度:{{ gameInfo.level }}</view>
 					<view>时间:{{ gameInfo.time }}s</view>
@@ -11,20 +11,9 @@
 					<view>最高纪录:{{ gameInfo.record ? `${gameInfo.record}s` : '无' }}</view>
 				</view>
 			</view>
-			<view v-else>请选择难度</view>
-		</view>
-		<view v-if="!hasChoseLevel">
-			<view class="level">
-				<view class="level-list" v-for="(item,index) in config" :key="index" @click="choseLevel(item)">
-					{{`${item.level} （${item.xNum}×${item.yNum}）`}}
-				</view>
-			</view>
-			<view class="custom">
-				<!-- <van-button plain type="info" @click="showOverlay = true">自定义棋盘图片</van-button> -->
-			</view>
 		</view>
 
-		<view v-else class="game-content">
+		<view class="game-content">
 			<view class="board">
 				<view v-for="(row,index) in board" class="board-row">
 					<view v-for="(column,key) in row"
@@ -59,57 +48,6 @@
 				<view v-if="over" class="bottom-tips">踩到地雷，游戏结束</view>
 			</view>
 		</view>
-		<!--  <van-overlay :show="showOverlay" @click="showOverlay = false">
-	        <view class="custom-wrapper" @click.stop>
-	            <view class="custom-wrapper__upload">
-	                <van-uploader class="custom-wrapper__upload-list"
-	                              :before-read="beforeRead"
-	                              :after-read="(file)=> afterRead(file,'boom')"
-	                              @oversize="onOversize">
-	                    <van-button icon="plus" type="default">更换地雷图标</van-button>
-	                </van-uploader>
-	                <van-uploader class="custom-wrapper__upload-list"
-	                              :before-read="beforeRead"
-	                              :after-read="(file)=> afterRead(file,'flag')"
-	                              @oversize="onOversize">
-	                    <van-button icon="plus" type="default">更换旗帜图标</van-button>
-	                </van-uploader>
-	                <van-button class="custom-wrapper__upload-list" icon="replay" type="default" @click="resetimage">还原默认图标
-	                </van-button>
-	            </view>
-	
-	            <view class="custom-wrapper__preview">
-	                <view class="custom-wrapper__preview-title">预览效果</view>
-	                <view class="custom-wrapper__preview-board">
-	                    <view class="board-row">
-	                        <view :class="['board-column','board-column--small']">
-	                            <view :class="['board-column__list','board-column__list--unknown']">
-	                            </view>
-	                        </view>
-	                        <view :class="['board-column','board-column--small']">
-	                            <view :class="['board-column__list','board-column__list--show']">
-	                                <image class="board-column__image"
-	                                     :src="boomimage"
-	                                     alt="炸弹">
-	                            </view>
-	                        </view>
-	                        <view :class="['board-column','board-column--small']">
-	                            <view :class="['board-column__list','board-column__list--unknown']">
-	                                <image class="board-column__image"
-	                                     :src="flagimage"
-	                                     alt="旗帜">
-	                            </view>
-	                        </view>
-	                    </view>
-	                </view>
-	            </view>
-	            <view class="custom-wrapper__tips">
-	                请上传图片(建议使用白色或透明底的正方形图片)<br/>
-	                注意:清除缓存会还原设置的图片
-	            </view>
-	
-	        </view>
-	    </van-overlay> -->
 	</view>
 </template>
 
@@ -117,30 +55,32 @@
 	export default {
 		data() {
 			return {
-				showOverlay: false, // 遮罩层开关
-				hasChoseLevel: false, // 难度选择页面开关
-				boomImg: 'static/images/icon_boom1.svg', // 默认地雷图标地址
-				flagImg: 'static/images/flag.svg', // 默认旗帜图标地址
+				boomImg: 'https://s3.bmp.ovh/imgs/2022/10/13/69c118a4fb8897a5.png', // 默认地雷图标地址
+				flagImg: 'https://s3.bmp.ovh/imgs/2022/10/13/0f9e276efd4a9e5c.png', // 默认旗帜图标地址
 				//难度配置
-				config: [{
-					alias: 'easy',
-					level: '青铜',
-					xNum: 9, // 列数
-					yNum: 9, // 行数
-					boomNum: 10, // 炸弹数
-				}, {
-					alias: 'middle',
-					level: '白银',
-					xNum: 16,
-					yNum: 16,
-					boomNum: 40,
-				}, {
-					alias: 'hard',
-					level: '黄金',
-					xNum: 16,
-					yNum: 30,
-					boomNum: 99,
-				}],
+				config: {
+					easy: {
+						alias: 'easy',
+						level: '青铜',
+						xNum: 9, // 列数
+						yNum: 9, // 行数
+						boomNum: 10, // 炸弹数
+					},
+					middle: {
+						alias: 'middle',
+						level: '白银',
+						xNum: 16,
+						yNum: 16,
+						boomNum: 40,
+					},
+					hard: {
+						alias: 'hard',
+						level: '黄金',
+						xNum: 16,
+						yNum: 30,
+						boomNum: 99,
+					}
+				},
 				// 难度评级配置
 				scoreLevel: {
 					easy: {
@@ -280,13 +220,21 @@
 				}
 			}
 		},
-		created() {
+		onLoad(option) {
 			// 判断本地缓存中是否已上传自定义图标
 			['boom', 'flag'].forEach((item) => {
-				if (localStorage.getItem(`${item}_img`)) {
-					this[`${item}Img`] = localStorage.getItem(`${item}_img`);
+				if (uni.getStorageSync(`${item}_img`)) {
+					this[`${item}Img`] = uni.getStorageSync(`${item}_img`);
 				}
 			})
+			if (option.level) {
+				this.gameInfo = {
+					...this.gameInfo,
+					...this.config[option.level],
+					record: uni.getStorageSync(`${option.level}_record`)
+				}
+				this.restart();
+			}
 		},
 		methods: {
 			// 重新开始确认
@@ -326,68 +274,6 @@
 					});
 				}
 
-			},
-			// 还原默认图标
-			resetImg() {
-				this.boomImg = 'static/images/icon_boom1.svg';
-				this.flagImg = 'static/images/flag.svg';
-				localStorage.removeItem('boom_img');
-				localStorage.removeItem('flag_img');
-				vant.Toast('还原成功');
-			},
-			// 打开难度选择页面
-			setLevelPage() {
-				clearInterval(this.timer); // 清除定时器
-				this.hasChoseLevel = false;
-			},
-			// 返回布尔值
-			beforeRead(file) {
-				if (file.type.indexOf('image') === -1) {
-					vant.Toast('请上传正确的图片');
-					return false;
-				}
-				return true;
-			},
-			// 上传回调
-			afterRead(files, string) {
-				const {
-					file
-				} = files;
-				console.log(files, file)
-				// 保存图片到本地缓存
-				let canvas = document.createElement('canvas') // 创建Canvas对象(画布)
-				let context = canvas.getContext('2d')
-				let img = new Image()
-				img.src = files.content
-				img.onload = () => {
-
-					canvas.width = 100
-
-					canvas.height = 100
-
-					context.drawImage(img, 0, 0, canvas.width, canvas.height)
-
-					if (file.size > 2 * 1024) {
-						//如果图片大小大于2M
-						vant.Toast.loading({
-							message: '正在压缩图片...',
-							forbidClick: true,
-						});
-						files.content = canvas.toDataURL(file.type)
-						localStorage.setItem(`${string}_img`, files.content)
-						this[`${string}Img`] = files.content;
-						vant.Toast('上传成功');
-					} else {
-						localStorage.setItem(`${string}_img`, files.content)
-						this[`${string}Img`] = files.content;
-						vant.Toast('上传成功');
-					}
-
-				}
-
-			},
-			onOversize(file) {
-				console.log(file);
 			},
 			/**
 			 * 选择难度
@@ -442,17 +328,17 @@
 					yNum,
 					xNum
 				} = this.gameInfo;
-
 				this.board = new Array(yNum).fill(new Array(xNum).fill({
 					data: '-1',
 					isShow: false,
 					isBoom: false
 				}));
 				[this.isInit, this.over, this.isSetFlag, this.gameInfo.time, this.flagNum] = [false, false, false, 0, 0];
-				this.timer = setInterval(() => {
-					const num = parseFloat(this.gameInfo.time) + 0.01
-					this.gameInfo.time = num.toFixed(2)
-				}, 10)
+				console.log('this.board', this.board)
+				// this.timer = setInterval(() => {
+				// 	const num = parseFloat(this.gameInfo.time) + 0.01
+				// 	this.gameInfo.time = num.toFixed(2)
+				// }, 10)
 			},
 
 			/**
@@ -583,4 +469,77 @@
 
 <style lang="scss" scoped>
 	@import url("@/static/index.scss");
+
+	//顶部
+	.top {
+		&-info {
+			display: flex;
+			flex-direction: column;
+
+			&__list {
+				display: flex;
+				justify-content: space-between;
+				padding: 0 10px;
+				flex: 1;
+			}
+		}
+	}
+
+	//底部
+	.bottom {
+		margin-top: 20px;
+
+		&-tips {
+			margin-top: 20px;
+			text-align: center;
+			color: #aaa;
+			font-size: 24px;
+			font-weight: 600;
+		}
+
+		&-button {
+			display: flex;
+			align-items: center;
+			justify-content: center;
+			flex-direction: column;
+
+			&__list {
+				display: inline-block;
+				width: 130px;
+				height: 44px;
+				line-height: 44px;
+				text-align: center;
+				white-space: nowrap;
+				cursor: pointer;
+				background: #fff;
+				border: 1px solid #dcdfe6;
+				color: #606266;
+				box-sizing: border-box;
+				outline: none;
+				margin: 10px;
+				transition: .1s;
+				font-weight: 500;
+				font-size: 14px;
+				border-radius: 4px;
+			}
+
+
+			&__restart {
+				color: #fff;
+				background: #909399;
+			}
+
+			&__flag {
+				color: #fff;
+				background-color: #409eff;
+				border-color: #409eff;
+
+				&--active {
+					color: #409eff;
+					background: #ecf5ff;
+					border-color: #b3d8ff;
+				}
+			}
+		}
+	}
 </style>

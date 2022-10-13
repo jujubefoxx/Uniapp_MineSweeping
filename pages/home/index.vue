@@ -16,8 +16,6 @@
 	export default {
 		data() {
 			return {
-				showOverlay: false, // 遮罩层开关
-				hasChoseLevel: false, // 难度选择页面开关
 				boomImg: 'static/images/icon_boom1.svg', // 默认地雷图标地址
 				flagImg: 'static/images/flag.svg', // 默认旗帜图标地址
 				//难度配置
@@ -111,106 +109,6 @@
 					url: '/pages/custom/index'
 				})
 			},
-			// 重新开始确认
-			handleRestart(isRestart = true) {
-				// 停止计时
-				clearInterval(this.timer)
-				if (this.over) {
-					if (isRestart) {
-						// 重新开始
-						this.restart();
-					} else {
-						// 返回主页
-						this.setLevelPage();
-					}
-				} else {
-					// 弹出对话框
-					vant.Dialog({
-						message: `确认要重新${isRestart ? '开始' : '选择难度'}吗?`,
-						confirmButtonColor: '#409eff',
-						confirmButtonText: '确认',
-						showCancelButton: true,
-						cancelButtonText: '取消'
-					}).then(() => {
-						if (isRestart) {
-							// 重新开始
-							this.restart();
-						} else {
-							// 返回主页
-							this.setLevelPage();
-						}
-					}).catch(() => {
-						// 重新计时
-						this.timer = setInterval(() => {
-							const num = parseFloat(this.gameInfo.time) + 0.01
-							this.gameInfo.time = num.toFixed(2)
-						}, 10)
-					});
-				}
-
-			},
-			// 还原默认图标
-			resetImg() {
-				this.boomImg = 'static/images/icon_boom1.svg';
-				this.flagImg = 'static/images/flag.svg';
-				localStorage.removeItem('boom_img');
-				localStorage.removeItem('flag_img');
-				vant.Toast('还原成功');
-			},
-			// 打开难度选择页面
-			setLevelPage() {
-				clearInterval(this.timer); // 清除定时器
-				this.hasChoseLevel = false;
-			},
-			// 返回布尔值
-			beforeRead(file) {
-				if (file.type.indexOf('image') === -1) {
-					vant.Toast('请上传正确的图片');
-					return false;
-				}
-				return true;
-			},
-			// 上传回调
-			afterRead(files, string) {
-				const {
-					file
-				} = files;
-				console.log(files, file)
-				// 保存图片到本地缓存
-				let canvas = document.createElement('canvas') // 创建Canvas对象(画布)
-				let context = canvas.getContext('2d')
-				let img = new Image()
-				img.src = files.content
-				img.onload = () => {
-
-					canvas.width = 100
-
-					canvas.height = 100
-
-					context.drawImage(img, 0, 0, canvas.width, canvas.height)
-
-					if (file.size > 2 * 1024) {
-						//如果图片大小大于2M
-						vant.Toast.loading({
-							message: '正在压缩图片...',
-							forbidClick: true,
-						});
-						files.content = canvas.toDataURL(file.type)
-						localStorage.setItem(`${string}_img`, files.content)
-						this[`${string}Img`] = files.content;
-						vant.Toast('上传成功');
-					} else {
-						localStorage.setItem(`${string}_img`, files.content)
-						this[`${string}Img`] = files.content;
-						vant.Toast('上传成功');
-					}
-
-				}
-
-			},
-			onOversize(file) {
-				console.log(file);
-			},
 			/**
 			 * 选择难度
 			 *
@@ -220,14 +118,9 @@
 				const {
 					alias
 				} = item;
-
-				this.gameInfo = {
-					...this.gameInfo,
-					...item,
-					record: localStorage.getItem(`${alias}_record`)
-				}
-				this.hasChoseLevel = true;
-				this.restart();
+				uni.navigateTo({
+					url: '/pages/game/index?level=' + alias
+				})
 			},
 
 			/**
@@ -405,6 +298,10 @@
 
 <style lang="scss" scoped>
 	@import url("@/static/index.scss");
+
+	.diy-btn {
+		margin-top: 20rpx;
+	}
 
 	//等级
 	.level {
