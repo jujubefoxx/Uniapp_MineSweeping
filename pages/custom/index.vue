@@ -1,25 +1,15 @@
 <template>
 	<view id="mineSweeper" class="mineSweeper-custom">
 		<view class="custom-wrapper__upload">
-			<view class="btn btn-upload">
+			<view class="btn btn-upload" @click="chooseImg">
 				<uni-icons type="plusempty" size="20" color="323233"></uni-icons>更换地雷图标
 			</view>
-			<view class="btn btn-upload">
+			<view class="btn btn-upload" @click="chooseImg">
 				<uni-icons type="plusempty" size="20" color="323233"></uni-icons>更换旗帜图标
 			</view>
-			<view class="btn btn-upload">
+			<view class="btn btn-upload" @click="resetImg">
 				<uni-icons type="refreshempty" size="20" color="323233"></uni-icons>还原默认图标
 			</view>
-			<!-- <van-uploader class="custom-wrapper__upload-list" :before-read="beforeRead"
-				:after-read="(file)=> afterRead(file,'boom')" @oversize="onOversize">
-				<van-button icon="plus" type="default">更换地雷图标</van-button>
-			</van-uploader>
-			<van-uploader class="custom-wrapper__upload-list" :before-read="beforeRead"
-				:after-read="(file)=> afterRead(file,'flag')" @oversize="onOversize">
-				<van-button icon="plus" type="default">更换旗帜图标</van-button>
-			</van-uploader>
-			<van-button class="custom-wrapper__upload-list" icon="replay" type="default" @click="resetimage">还原默认图标
-			</van-button> -->
 		</view>
 
 		<view class="custom-wrapper__preview">
@@ -32,12 +22,12 @@
 					</view>
 					<view :class="['board-column','board-column--small']">
 						<view :class="['board-column__list','board-column__list--show']">
-							<image class="board-column__image" :src="boomImg" alt="炸弹">
+							<image class="board-column__image" :src="boomImg" alt="炸弹" mode="scaleToFill">
 						</view>
 					</view>
 					<view :class="['board-column','board-column--small']">
 						<view :class="['board-column__list','board-column__list--unknown']">
-							<image class="board-column__image" :src="flagImg" alt="旗帜">
+							<image class="board-column__image" :src="flagImg" alt="旗帜" mode="scaleToFill">
 						</view>
 					</view>
 				</view>
@@ -173,7 +163,7 @@
 			// })
 		},
 		methods: {
-			choseImg() {
+			chooseImg() {
 				uni.chooseImage({
 					count: 1, //默认9
 					sizeType: ['compressed'], //可以指定是原图还是压缩图，默认二者都有
@@ -222,11 +212,14 @@
 			},
 			// 还原默认图标
 			resetImg() {
-				this.boomImg = 'static/images/icon_boom1.svg';
-				this.flagImg = 'static/images/flag.svg';
+				this.boomImg = 'https://s3.bmp.ovh/imgs/2022/10/13/69c118a4fb8897a5.png';
+				this.flagImg = 'https://s3.bmp.ovh/imgs/2022/10/13/0f9e276efd4a9e5c.png';
 				localStorage.removeItem('boom_img');
 				localStorage.removeItem('flag_img');
-				vant.Toast('还原成功');
+				uni.showToast({
+					icon: 'none',
+					title: '还原成功'
+				})
 			},
 			// 打开难度选择页面
 			setLevelPage() {
@@ -236,7 +229,10 @@
 			// 返回布尔值
 			beforeRead(file) {
 				if (file.type.indexOf('image') === -1) {
-					vant.Toast('请上传正确的图片');
+					uni.showToast({
+						icon: 'none',
+						title: '请上传正确的图片'
+					})
 					return false;
 				}
 				return true;
@@ -536,6 +532,76 @@
 		&-cropper {
 			width: 500px;
 			height: 500px;
+		}
+	}
+
+	//棋盘
+	.board {
+		max-width: 740rpx;
+		background: whitesmoke;
+		padding: 10px;
+		margin: 10px auto;
+
+		&-row {
+			display: flex;
+			overflow: hidden;
+			justify-content: center;
+		}
+
+		&-column {
+			display: flex;
+			justify-content: center;
+			align-items: center;
+			//flex: 1;
+			margin: 1px;
+			background: gainsboro;
+			overflow: hidden;
+
+			&--small {
+				width: 38px;
+				height: 38px;
+			}
+
+			&--middle {
+				width: 20px;
+				height: 20px;
+				font-size: 12px;
+			}
+
+			&--large {
+				width: 20px;
+				height: 20px;
+				font-size: 12px;
+			}
+
+			&__list {
+				display: flex;
+				justify-content: center;
+				align-items: center;
+				width: 100%;
+				height: 100%;
+				overflow: hidden;
+
+				&--unknown {
+					cursor: pointer;
+				}
+
+				&--show {
+					box-sizing: border-box;
+					background: #fff;
+					box-shadow: gainsboro 2px 2px inset;
+					padding: 2px 0 0 2px;
+				}
+			}
+
+			&__image {
+				width: 85%;
+				height: 85%;
+
+				&--disable {
+					cursor: auto;
+				}
+			}
 		}
 	}
 </style>
