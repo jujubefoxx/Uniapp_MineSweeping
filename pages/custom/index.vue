@@ -2,13 +2,13 @@
 	<view id="mineSweeper" class="mineSweeper-custom">
 		<view class="custom-wrapper__upload">
 			<view class="btn btn-upload">
-				<uni-icons type="plusempty" size="24" color="323233"></uni-icons>更换地雷图标
+				<uni-icons type="plusempty" size="20" color="323233"></uni-icons>更换地雷图标
 			</view>
 			<view class="btn btn-upload">
-				<uni-icons type="plusempty" size="24" color="323233"></uni-icons>更换旗帜图标
+				<uni-icons type="plusempty" size="20" color="323233"></uni-icons>更换旗帜图标
 			</view>
 			<view class="btn btn-upload">
-				<uni-icons type="refreshempty" size="24" color="323233"></uni-icons>还原默认图标
+				<uni-icons type="refreshempty" size="20" color="323233"></uni-icons>还原默认图标
 			</view>
 			<!-- <van-uploader class="custom-wrapper__upload-list" :before-read="beforeRead"
 				:after-read="(file)=> afterRead(file,'boom')" @oversize="onOversize">
@@ -58,8 +58,8 @@
 			return {
 				showOverlay: false, // 遮罩层开关
 				hasChoseLevel: false, // 难度选择页面开关
-				boomImg: '@/static/images/icon_boom1.svg', // 默认地雷图标地址
-				flagImg: '@/static/images/flag.svg', // 默认旗帜图标地址
+				boomImg: 'https://s3.bmp.ovh/imgs/2022/10/13/69c118a4fb8897a5.png', // 默认地雷图标地址
+				flagImg: 'https://s3.bmp.ovh/imgs/2022/10/13/0f9e276efd4a9e5c.png', // 默认旗帜图标地址
 				//难度配置
 				config: [{
 					alias: 'easy',
@@ -166,11 +166,11 @@
 		},
 		created() {
 			// 判断本地缓存中是否已上传自定义图标
-			['boom', 'flag'].forEach((item) => {
-				if (localStorage.getItem(`${item}_img`)) {
-					this[`${item}Img`] = localStorage.getItem(`${item}_img`);
-				}
-			})
+			// ['boom', 'flag'].forEach((item) => {
+			// 	if (localStorage.getItem(`${item}_img`)) {
+			// 		this[`${item}Img`] = localStorage.getItem(`${item}_img`);
+			// 	}
+			// })
 		},
 		methods: {
 			choseImg() {
@@ -481,11 +481,15 @@
 		display: flex;
 		align-items: center;
 		padding: 0 20rpx;
-		height: 88rpx;
+		height: 80rpx;
 		color: #323233;
 		background-color: #fff;
 		border: 2rpx solid #ebedf0;
 		margin-top: 40rpx;
+
+		.uni-icons {
+			margin-right: 4rpx;
+		}
 	}
 
 	// 自定义遮罩层
