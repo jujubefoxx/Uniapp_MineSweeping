@@ -1,48 +1,8 @@
-// 自定义遮罩层
-.custom {
-  text-align: center;
-  margin: 20px auto;
-
-  &-wrapper {
-    width: 300px;
-    margin: 30px auto;
-    padding: 20px;
-    background: #fff;
-    border-radius: 4px;
-
-    &__upload {
-      display: flex;
-      flex-direction: column;
-      justify-content: space-around;
-      align-items: center;
-      margin: 10px 0;
-
-      &-list {
-        margin: 5px 0 !important;
-      }
-    }
-
-    &__tips {
-      margin-top: 30px;
-      font-size: 12px;
-      color: #606266;
-      text-align: center;
-    }
-
-    &__preview {
-      margin-top: 30px;
-      text-align: center;
-
-      &-title {
-        margin: 10px;
-      }
-    }
-  }
-
-  &-cropper {
-    width: 500px;
-    height: 500px;
-  }
+.btn{
+	font-size: 24rpx;
+}
+.diy-btn{
+	margin-top: 20rpx;
 }
 
 //顶部
@@ -193,38 +153,11 @@
   }
 }
 
-//等级
-.level {
-  display: flex;
-  align-items: center;
-  flex-direction: column;
-  justify-content: space-around;
-  max-width: 360px;
-  margin: 10px auto;
-  padding: 16px;
-  border: 2px dashed #409eff;
 
-  &-list {
-    display: inline-block;
-    width: 200px;
-    height: 30px;
-    line-height: 30px;
-    margin: 10px;
-    white-space: nowrap;
-    cursor: pointer;
-    -webkit-appearance: none;
-    text-align: center;
-    box-sizing: border-box;
-    outline: none;
-    transition: .1s;
-    font-weight: 500;
-    -moz-user-select: none;
-    -webkit-user-select: none;
-    -ms-user-select: none;
-    font-size: 14px;
-    border-radius: 20px;
-    color: #fff;
-    background-color: #409eff;
-    border-color: #409eff;
-  }
+.mineSweeper-level{
+	height: 100vh;
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	flex-direction: column;
 }

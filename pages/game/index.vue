@@ -1,10 +1,4 @@
 <template>
-	<!-- <view class="content"> -->
-	<!-- 	<image class="logo" src="/static/logo.png"></image>
-		<view class="text-area">
-			<text class="title">{{title}}</text>
-		</view> -->
-	<!-- </view> -->
 	<view id="mineSweeper" class="mineSweeper">
 		<view class="top">
 			<view v-if="hasChoseLevel" class="top-info">
