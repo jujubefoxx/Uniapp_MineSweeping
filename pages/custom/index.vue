@@ -1,7 +1,15 @@
 <template>
 	<view id="mineSweeper" class="mineSweeper-custom">
 		<view class="custom-wrapper__upload">
-			<view class="btn btn-upload">更换地雷图标</view>
+			<view class="btn btn-upload">
+				<uni-icons type="plusempty" size="24" color="323233"></uni-icons>更换地雷图标
+			</view>
+			<view class="btn btn-upload">
+				<uni-icons type="plusempty" size="24" color="323233"></uni-icons>更换旗帜图标
+			</view>
+			<view class="btn btn-upload">
+				<uni-icons type="refreshempty" size="24" color="323233"></uni-icons>还原默认图标
+			</view>
 			<!-- <van-uploader class="custom-wrapper__upload-list" :before-read="beforeRead"
 				:after-read="(file)=> afterRead(file,'boom')" @oversize="onOversize">
 				<van-button icon="plus" type="default">更换地雷图标</van-button>
@@ -24,12 +32,12 @@
 					</view>
 					<view :class="['board-column','board-column--small']">
 						<view :class="['board-column__list','board-column__list--show']">
-							<image class="board-column__image" :src="boomimage" alt="炸弹">
+							<image class="board-column__image" :src="boomImg" alt="炸弹">
 						</view>
 					</view>
 					<view :class="['board-column','board-column--small']">
 						<view :class="['board-column__list','board-column__list--unknown']">
-							<image class="board-column__image" :src="flagimage" alt="旗帜">
+							<image class="board-column__image" :src="flagImg" alt="旗帜">
 						</view>
 					</view>
 				</view>
@@ -50,8 +58,8 @@
 			return {
 				showOverlay: false, // 遮罩层开关
 				hasChoseLevel: false, // 难度选择页面开关
-				boomImg: 'static/images/icon_boom1.svg', // 默认地雷图标地址
-				flagImg: 'static/images/flag.svg', // 默认旗帜图标地址
+				boomImg: '@/static/images/icon_boom1.svg', // 默认地雷图标地址
+				flagImg: '@/static/images/flag.svg', // 默认旗帜图标地址
 				//难度配置
 				config: [{
 					alias: 'easy',
@@ -470,9 +478,14 @@
 	@import url("@/static/index.scss");
 
 	.btn-upload {
+		display: flex;
+		align-items: center;
+		padding: 0 20rpx;
+		height: 88rpx;
 		color: #323233;
 		background-color: #fff;
-		border: 1px solid #ebedf0;
+		border: 2rpx solid #ebedf0;
+		margin-top: 40rpx;
 	}
 
 	// 自定义遮罩层
