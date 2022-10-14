@@ -1,5 +1,5 @@
 <template>
-	<view id="mineSweeper" class="mineSweeper-game">
+	<view class="mineSweeper-game">
 		<view class="top">
 			<view class="top-info">
 				<view class="top-info__list">
@@ -199,7 +199,7 @@
 
 					// 判断是否为最高纪录
 					if (!record || parseFloat(time) < parseFloat(record)) {
-						localStorage.setItem(`${alias}_record`, time)
+						uni.setStorageSync(`${alias}_record`, time)
 						this.gameInfo.record = time;
 					}
 

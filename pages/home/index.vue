@@ -1,5 +1,5 @@
 <template>
-	<view id="mineSweeper" class="mineSweeper-level">
+	<view class="mineSweeper-level">
 		<view class="top">
 			请选择难度
 		</view>
@@ -301,6 +301,8 @@
 
 	.diy-btn {
 		margin-top: 20rpx;
+		border: 2rpx solid #409eff !important;
+		color: #409eff !important;
 	}
 
 	//等级

@@ -87,25 +87,6 @@
 						})
 					}
 				});
-
-				// h5不可用
-				// uni.chooseImage({
-				// 	count: 1,
-				// 	success: function(res) {
-				// 		const tempFilePaths = res.tempFilePaths;
-				// 		uni.saveFile({
-				// 			tempFilePath: tempFilePaths[0],
-				// 			success: function(res) {
-				// 				const savedFilePath = res.savedFilePath;
-				// 				uni.getSavedFileList({
-				// 					success: function(res) {
-				// 						console.log(res.fileList);
-				// 					}
-				// 				});
-				// 			}
-				// 		});
-				// 	}
-				// });
 			},
 			// 还原默认图标
 			resetImg() {
@@ -118,45 +99,6 @@
 					title: '还原成功'
 				})
 			},
-			// 上传回调
-			// afterRead(files, string) {
-			// 	const {
-			// 		file
-			// 	} = files;
-			// 	// 保存图片到本地缓存
-			// 	let canvas = document.createElement('canvas') // 创建Canvas对象(画布)
-			// 	let context = canvas.getContext('2d')
-			// 	let img = new Image()
-			// 	img.src = files.content
-			// 	img.onload = () => {
-			// 		canvas.width = 100
-			// 		canvas.height = 100
-			// 		context.drawImage(img, 0, 0, canvas.width, canvas.height)
-
-			// 		if (file.size > 2 * 1024) {
-			// 			uni.showLoading({
-			// 				title: '正在压缩图片...'
-			// 			})
-			// 			files.content = canvas.toDataURL(file.type)
-			// 			localStorage.setItem(`${string}_img`, files.content)
-			// 			this[`${string}Img`] = files.content;
-			// 			uni.hideLoading();
-			// 			uni.showToast({
-			// 				icon: 'none',
-			// 				title: '上传成功'
-			// 			})
-			// 		} else {
-			// 			localStorage.setItem(`${string}_img`, files.content)
-			// 			this[`${string}Img`] = files.content;
-			// 			uni.showToast({
-			// 				icon: 'none',
-			// 				title: '上传成功'
-			// 			})
-			// 		}
-
-			// 	}
-
-			// }
 		}
 	}
 </script>
