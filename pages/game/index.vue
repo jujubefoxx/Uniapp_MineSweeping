@@ -21,14 +21,14 @@
 						@click="isSetFlag ? setFlag([index,key], column) : isInit ? updateBoard([index,key],column.data) : setBoom([index,key])">
 						<view
 							:class="['board-column__list',column.isShow ? 'board-column__list--show':'board-column__list--unknown']">
-							<image v-if="column.data === 'X'" class="board-column__image" :src="boomimage" alt="炸弹">
+							<image v-if="column.data === 'X'" class="board-column__image" :src="boomImg" alt="炸弹">
 								<image v-else-if="column.data === 'F'"
 									:class="['board-column__image',!isSetFlag ? 'board-column__image--disable' : '']"
-									:src="flagimage" alt="旗帜">
+									:src="flagImg" alt="旗帜">
 									<!--                        <view v-else-if="parseInt(column.data) > 0">{{ column.data }}</view>-->
 									<image v-else-if="parseInt(column.data) > 0"
 										class="board-column__image board-column__image--number"
-										:src="`static/images/shuzi${column.data}.svg`" :alt="column.data">
+										:src="`/static/images/shuzi${column.data}.png`" :alt="column.data">
 						</view>
 					</view>
 				</view>
@@ -470,20 +470,7 @@
 <style lang="scss" scoped>
 	@import url("@/static/index.scss");
 
-	//顶部
-	.top {
-		&-info {
-			display: flex;
-			flex-direction: column;
 
-			&__list {
-				display: flex;
-				justify-content: space-between;
-				padding: 0 10px;
-				flex: 1;
-			}
-		}
-	}
 
 	//底部
 	.bottom {

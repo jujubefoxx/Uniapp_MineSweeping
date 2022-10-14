@@ -14,6 +14,27 @@
 
 <style lang="scss">
 	/*每个页面公共css */
+	//顶部
+	.top {
+		margin: 40rpx auto;
+		color: #222;
+		font-weight: bold;
+		max-width: 100vw;
+		font-size: 28rpx;
+
+		&-info {
+			display: flex;
+			flex-direction: column;
+
+			&__list {
+				display: flex;
+				justify-content: space-between;
+				padding: 0 10px;
+				flex: 1;
+			}
+		}
+	}
+
 	.board {
 		max-width: 740rpx;
 		background: whitesmoke;
