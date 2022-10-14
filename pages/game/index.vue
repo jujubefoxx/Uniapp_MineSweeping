@@ -205,8 +205,8 @@
 
 					// 弹出对话框
 					uni.showModal({
-						title: '注意',
-						content: `恭喜用时${time}秒挑战成功！\n击败了${percent}%的玩家！\n您的最高纪录：${this.gameInfo.record}秒`,
+						title: '恭喜',
+						content: `用时${time}秒挑战成功！\n击败了${percent}%的玩家！\n您的最高纪录：${this.gameInfo.record}秒`,
 						confirmText: '重新开始',
 						cancelText: '返回主页',
 						confirmColor: '#409eff',
