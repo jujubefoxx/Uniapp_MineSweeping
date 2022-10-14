@@ -204,19 +204,23 @@
 					}
 
 					// 弹出对话框
-					vant.Dialog({
-						message: `恭喜用时${time}秒挑战成功！\n击败了${percent}%的玩家！\n您的最高纪录：${this.gameInfo.record}秒`,
-						confirmButtonColor: '#409eff',
-						confirmButtonText: '重新开始',
-						showCancelButton: true,
-						cancelButtonText: '返回主页'
-					}).then(() => {
-						// 重新开始
-						this.restart();
-					}).catch(() => {
-						// 返回主页
-						this.setLevelPage();
-					});
+					uni.showModal({
+						title: '注意',
+						content: `恭喜用时${time}秒挑战成功！\n击败了${percent}%的玩家！\n您的最高纪录：${this.gameInfo.record}秒`,
+						confirmText: '重新开始',
+						cancelText: '返回主页',
+						confirmColor: '#409eff',
+						success: (res) => {
+							if (res.confirm) {
+								// 重新开始
+								this.restart();
+							}
+							if (res.cancel) {
+								// 返回主页
+								this.setLevelPage();
+							}
+						}
+					})
 				}
 			}
 		},
@@ -237,9 +241,15 @@
 			}
 		},
 		methods: {
+			// 返回主页
+			setLevelPage() {
+				uni.reLaunch({
+					url: '/pages/home/index'
+				})
+			},
 			// 重新开始确认
 			handleRestart(isRestart = true) {
-				// 停止计时
+				// 清除计时器
 				clearInterval(this.timer)
 				if (this.over) {
 					if (isRestart) {
@@ -250,28 +260,29 @@
 						this.setLevelPage();
 					}
 				} else {
-					// 弹出对话框
-					vant.Dialog({
-						message: `确认要重新${isRestart ? '开始' : '选择难度'}吗?`,
-						confirmButtonColor: '#409eff',
-						confirmButtonText: '确认',
-						showCancelButton: true,
-						cancelButtonText: '取消'
-					}).then(() => {
-						if (isRestart) {
-							// 重新开始
-							this.restart();
-						} else {
-							// 返回主页
-							this.setLevelPage();
+					uni.showModal({
+						title: '注意',
+						content: `确认要重新${isRestart ? '开始' : '选择难度'}吗?`,
+						confirmColor: '#409eff',
+						success: (res) => {
+							if (res.confirm) {
+								if (isRestart) {
+									// 重新开始
+									this.restart();
+								} else {
+									// 返回主页
+									this.setLevelPage();
+								}
+							}
+							if (res.cancel) {
+								// 继续计时
+								this.timer = setInterval(() => {
+									const num = parseFloat(this.gameInfo.time) + 0.01
+									this.gameInfo.time = num.toFixed(2)
+								}, 10)
+							}
 						}
-					}).catch(() => {
-						// 重新计时
-						this.timer = setInterval(() => {
-							const num = parseFloat(this.gameInfo.time) + 0.01
-							this.gameInfo.time = num.toFixed(2)
-						}, 10)
-					});
+					})
 				}
 
 			},
@@ -334,11 +345,10 @@
 					isBoom: false
 				}));
 				[this.isInit, this.over, this.isSetFlag, this.gameInfo.time, this.flagNum] = [false, false, false, 0, 0];
-				console.log('this.board', this.board)
-				// this.timer = setInterval(() => {
-				// 	const num = parseFloat(this.gameInfo.time) + 0.01
-				// 	this.gameInfo.time = num.toFixed(2)
-				// }, 10)
+				this.timer = setInterval(() => {
+					const num = parseFloat(this.gameInfo.time) + 0.01
+					this.gameInfo.time = num.toFixed(2)
+				}, 10)
 			},
 
 			/**
