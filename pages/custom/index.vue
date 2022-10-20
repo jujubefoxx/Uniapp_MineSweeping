@@ -44,7 +44,7 @@
 
 <script>
 	import {
-		pathToBase64
+		pathToBase64,base64ToPath
 	} from '@/utils/image-tools/index.js'
 	export default {
 		data() {
@@ -57,7 +57,9 @@
 			// 判断本地缓存中是否已上传自定义图标
 			['boom', 'flag'].forEach((item) => {
 				if (uni.getStorageSync(`${item}_img`)) {
-					this[`${item}Img`] = uni.getStorageSync(`${item}_img`);
+					base64ToPath(uni.getStorageSync(`${item}_img`)).then((img)=>{
+						this[`${item}Img`] = img; // 转换为链接
+					})
 				}
 			})
 		},
